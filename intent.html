@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Changi Ops Assistant - Intent Classifier</title>
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <style type="text/tailwindcss">
+    :root { --primary:#11d4d4; --background-dark:#102222; --surface-dark:#193333; --border-dark:#326767; }
+    .material-symbols-outlined { font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24; }
+    .active-tab { font-variation-settings:'FILL' 1; }
+  </style>
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: { extend: {
+        colors: { "primary":"#11d4d4","background-light":"#f6f8f8","background-dark":"#102222" },
+        fontFamily: { "display":["Inter","sans-serif"] },
+        borderRadius: { "DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px" }
+      }}
+    }
+  </script>
+</head>
+
+<body data-page="intent" class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white min-h-screen">
+<div class="relative flex flex-col min-h-screen w-full overflow-x-hidden">
+
+  <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/20 px-10 py-4 bg-background-light dark:bg-background-dark sticky top-0 z-50">
+    <div class="flex items-center gap-4 mx-auto w-full max-w-[1440px]">
+      <div class="size-8 text-primary">
+        <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.8261 17.4264...Z" fill="currentColor"></path>
+          <path clip-rule="evenodd" fill-rule="evenodd" d="M39.998 12.236...Z" fill="currentColor"></path>
+        </svg>
+      </div>
+      <h2 class="text-lg font-bold leading-tight tracking-tight">Changi Ops Assistant</h2>
+    </div>
+  </header>
+
+  <main class="flex flex-1 flex-col items-center px-4 md:px-10 lg:px-40 py-8 max-w-[1440px] mx-auto w-full">
+    <div class="flex flex-col gap-2 w-full mb-8">
+      <h1 class="text-4xl font-black leading-tight tracking-tight">Intent Classifier</h1>
+      <p class="text-slate-500 dark:text-[#92c9c9] text-lg">Simplified interface for mission-critical intent analysis.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="w-full mb-8">
+      <div class="flex border-b border-slate-200 dark:border-[#326767] gap-8">
+        <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 dark:text-[#92c9c9] hover:text-primary/70 transition-all gap-1 pb-3 pt-2"
+           href="aircraft.html">
+          <span class="material-symbols-outlined" style="font-size:24px;">flight</span>
+          <p class="text-sm font-bold tracking-wide">Aircraft Classifier</p>
+        </a>
+
+        <a class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-primary gap-1 pb-3 pt-2"
+           href="intent.html">
+          <span class="material-symbols-outlined active-tab" style="font-size:24px;">chat_bubble</span>
+          <p class="text-sm font-bold tracking-wide">Intent Classifier</p>
+        </a>
+
+        <a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 dark:text-[#92c9c9] hover:text-primary/70 transition-all gap-1 pb-3 pt-2"
+           href="emotion.html">
+          <span class="material-symbols-outlined" style="font-size:24px;">mood</span>
+          <p class="text-sm font-bold tracking-wide">Emotion Classifier</p>
+        </a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 w-full items-start">
+
+      <!-- Left -->
+      <div class="lg:col-span-7 flex flex-col gap-6">
+        <div class="rounded-xl border border-slate-200 dark:border-[#326767] bg-white dark:bg-[#193333] p-6 shadow-sm">
+          <div class="flex items-center gap-3 mb-6">
+            <span class="bg-primary/20 text-primary p-2 rounded-lg material-symbols-outlined">message</span>
+            <div>
+              <h3 class="font-bold text-lg">Action Zone</h3>
+              <p class="text-slate-500 dark:text-[#92c9c9] text-sm">Enter message for intent classification</p>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-6">
+            <textarea id="intentText"
+              class="w-full min-h-[320px] rounded-xl bg-slate-50 dark:bg-[#112222]/50 border-2 border-slate-300 dark:border-[#326767] focus:border-primary focus:ring-0 text-slate-900 dark:text-white p-6 placeholder-slate-400 dark:placeholder-slate-600 transition-all resize-none text-lg"
+              placeholder="Type or paste the passenger inquiry here..."></textarea>
+
+            <!-- PLACEHOLDER NOTE:
+                 Your RNN model call happens in app.js (runIntent()) via:
+                 fetch(`${API_BASE_URL}/predict/intent`, JSON { text })
+             -->
+            <button id="intentBtn"
+              class="w-full flex items-center justify-center gap-2 rounded-lg h-14 bg-primary text-[#102222] text-lg font-black tracking-wide shadow-lg shadow-primary/30 hover:brightness-110 active:scale-[0.99] transition-all">
+              <span class="material-symbols-outlined">analytics</span>
+              ANALYZE INTENT
+            </button>
+
+            <p id="statusMsg" class="text-sm text-slate-500 dark:text-[#92c9c9]"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right -->
+      <div class="lg:col-span-5 flex flex-col gap-6">
+        <div class="rounded-xl border border-slate-200 dark:border-[#326767] bg-white dark:bg-[#193333] p-6 shadow-sm min-h-[460px] flex flex-col">
+          <div class="flex items-center gap-3 mb-8">
+            <span class="bg-primary/20 text-primary p-2 rounded-lg material-symbols-outlined">psychology</span>
+            <div>
+              <h3 class="font-bold text-lg">Intelligence Zone</h3>
+              <p class="text-slate-500 dark:text-[#92c9c9] text-sm">Real-time prediction</p>
+            </div>
+          </div>
+
+          <div class="bg-primary/5 border border-primary/20 rounded-xl p-8 flex-1 flex flex-col justify-center">
+            <p class="text-xs font-bold text-primary uppercase tracking-[0.2em] mb-4 text-center">Top Predicted Intent</p>
+            <div class="flex items-center justify-center mb-4">
+              <span id="resultIcon" class="material-symbols-outlined text-primary" style="font-size:48px; font-variation-settings:'FILL' 1;">chat_bubble</span>
+            </div>
+
+            <h4 id="resultTitle" class="text-4xl font-black mb-8 text-center">—</h4>
+
+            <div class="w-full max-w-[320px] mx-auto">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-slate-500 dark:text-[#92c9c9]">Confidence</span>
+                <span id="resultConfidence" class="text-sm font-black text-primary">—</span>
+              </div>
+              <div class="w-full bg-slate-200 dark:bg-slate-700 h-3 rounded-full overflow-hidden">
+                <div id="resultBar" class="bg-primary h-full w-[0%] shadow-[0_0_12px_rgba(17,212,212,0.6)]"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 opacity-30">
+    <div class="absolute top-[-10%] left-[-5%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full"></div>
+    <div class="absolute bottom-[-10%] right-[-5%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
