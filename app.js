@@ -1,15 +1,15 @@
 // app.js
 // ==============================
-// 1) PUT YOUR DEPLOYED API BASE URL HERE
-//    Example: https://your-api.onrender.com
+// Backend base URL – local Express server (run: npm start)
+// For production, set to your deployed API URL.
 // ==============================
-const API_BASE_URL = "https://YOUR-DEPLOYED-API-BASE-URL";
+const API_BASE_URL = "http://localhost:3001";
 
 // Optional: if your endpoints differ, change these:
 const ENDPOINTS = {
   aircraft: "/predict/aircraft", // expects multipart/form-data { file }
-  intent: "/predict/intent",     // expects JSON { text }
-  emotion: "/predict/emotion"    // expects JSON { text }
+  intent: "/api/predict/intent", // proxied via Express to HF Space
+  emotion: "/predict/emotion"   // expects JSON { text }
 };
 
 // Emotion label -> Material Symbol icon name
@@ -147,9 +147,8 @@ async function runIntent() {
     if (!res.ok) throw new Error(`API error: ${res.status}`);
     const data = await res.json();
 
-    // Expected:
-    // { label: "Flight Inquiry", confidence: 0.948 }
-    const label = data.label ?? "Unknown";
+    // API returns: { intent: "flight", confidence: 0.7767 }
+    const label = data.intent ?? data.label ?? "Unknown";
     const confPct = data.confidence != null ? data.confidence * 100 : null;
 
     updateResult({ title: label, confidence: confPct, iconName: "chat_bubble" });
